@@ -9,6 +9,12 @@ idrees.sa@gmail.com
 """
 
 # import needed modules
+import sys
+# update this 
+sys.path.append('/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/code/')
+
+import matplotlib.pyplot as plt
+
 import numpy as np
 import os
 
@@ -33,7 +39,7 @@ tf.compat.v1.disable_eager_execution()
     and data_train.y contains the spikerate normalized by median [samples,numOfCells]
 """
 
-
+# update this 
 fname_data_train_val_test_all = '/home/saad/postdoc_db/analyses/data_kiersten/monkey01/datasets/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
 
 
@@ -62,6 +68,91 @@ data_train.y contains the firing rate [time,rgc]
 Same for data_val and data_test. The three datasets (train, val and test) will not overlap
 
 """
+
+
+# Train Data
+print(f"Shape of the train data is: {data_train[0].shape}")
+print(f"Shape of the validation data is: {data_val[1].shape}")
+print(f"Shape of the testn data is: {data_test[1].shape}")
+
+training=rgb[0]
+movie_frames_t=data_train.X
+firing_rate_t=data_train.y
+num_samples_train=movie_frames_t.shape[0]
+num_frames_per_sample=movie_frames_t.shape[1]
+
+print(f"Shape of train dataset_movie frames {movie_frames_t.shape} and firing rate is {firing_rate_t.shape}")
+print(f"there are {num_samples_train} samples, each sample consists of {num_frames_per_sample} frames ")
+
+
+# there are 120 frames per sample 
+plt.imshow(movie_frames_t[1,1,:,:],cmap='gray')
+plt.imshow(movie_frames_t[1,2,:,:],cmap='gray')
+plt.imshow(movie_frames_t[1,119,:,:],cmap='gray')
+
+
+# there is one firing rate per sample 
+plt.figure(figsize=(20,15))
+plt.plot(firing_rate_t[:,1])
+
+
+# Validation data 
+validation=rgb[1]
+movie_frames_v=data_val.X
+firing_rate_v=data_val.y
+num_samples_val=movie_frames_v.shape[0]
+num_frames_per_sample_val=movie_frames_v.shape[1]
+print(f"Shape of validation dataset_movie frames {movie_frames_v.shape} and firing rate is {firing_rate_v.shape}")
+print(f"there are {num_samples_val} samples, each sample consists of {num_frames_per_sample_val} frames ")
+
+
+
+plt.imshow(movie_frames_v[1,1,:,:],cmap='gray')
+plt.imshow(movie_frames_v[1,2,:,:],cmap='gray')
+plt.imshow(movie_frames_v[1,119,:,:],cmap='gray')
+
+# there is one firing rate per sample 
+plt.figure(figsize=(20,15))
+plt.plot(firing_rate_v[:,1])
+
+
+
+
+# Test data 
+#testing=rgb[2]
+movie_frames_te=data_test.X
+firing_rate_te=data_test.y
+num_samples_te=movie_frames_te.shape[0]
+num_frames_per_sample_te=movie_frames_te.shape[1]
+print(f"Shape of testing dataset_movie frames {movie_frames_te.shape} and firing rate is {firing_rate_te.shape}")
+print(f"there are {num_samples_te} samples, each sample consists of {num_frames_per_sample_te} frames ")
+
+
+
+plt.imshow(movie_frames_te[1,1,:,:],cmap='gray')
+plt.imshow(movie_frames_te[1,2,:,:],cmap='gray')
+plt.imshow(movie_frames_te[1,119,:,:],cmap='gray')
+
+# there is one firing rate per sample 
+plt.figure(figsize=(20,15))
+plt.plot(firing_rate_te[:,1])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # %% Arrange data in training samples format. Roll the time dimension to have movie chunks equal to the temporal width of your CNN
 temporal_width = 120   # frames (120 frames ~ 1s)

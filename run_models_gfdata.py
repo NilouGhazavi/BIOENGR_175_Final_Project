@@ -11,7 +11,7 @@ idrees.sa@gmail.com
 # import needed modules
 import sys
 # update this 
-sys.path.append('/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/code/')
+sys.path.append('/Users/niloughazavi/Documents/GitHub/BIOENGR_175_Final_Project')
 
 import matplotlib.pyplot as plt
 
@@ -40,7 +40,7 @@ tf.compat.v1.disable_eager_execution()
 """
 
 # update this 
-fname_data_train_val_test_all = '/home/saad/postdoc_db/analyses/data_kiersten/monkey01/datasets/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
+fname_data_train_val_test_all = '/Users/niloughazavi/Desktop/Dataset_Saad/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
 
 
 idx_train_start = 0    # mins to chop off in the begining.
@@ -279,3 +279,65 @@ mdl_history = mdl.fit(x=X, y=y, batch_size=125, epochs=nb_epochs)
 
 
 """
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+
+
+
+class FlexibleDataGenerator(tf.keras.utils.Sequence):
+
+    def __init__(self, data_train, data_val, indices, batch_size=128):
+        self.data_train = data_train
+        self.data_val = data_val
+        self.indices = indices
+        self.batch_size = batch_size
+
+    def __len__(self):
+        return int(np.ceil(len(self.indices) / self.batch_size))
+
+    def __getitem__(self, idx):
+        batch_indices = self.indices[idx * self.batch_size : (idx + 1) * self.batch_size]
+        batch_x = []
+        batch_y = []
+        for i in batch_indices:
+            if i < len(self.data_train[0]):  # Check if index is in training data
+                batch_x.append(self.data_train[0][i])
+                batch_y.append(self.data_train[1][i])
+            else:  # Otherwise, it's in the validation data
+                i -= len(self.data_train[0])
+                batch_x.append(self.data_val[0][i])
+                batch_y.append(self.data_val[1][i])
+        return np.array(batch_x), np.array(batch_y)
+
+
+
+#  K-Fold Cross-Validation
+n_splits = 5
+kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
+total_samples = len(data_train.X) + len(data_val.X)
+indices = np.arange(total_samples)
+
+for fold, (train_indices, val_indices) in enumerate(kf.split(indices)):
+    train_generator = FlexibleDataGenerator((data_train.X, data_train.y), (data_val.X, data_val.y), train_indices, batch_size=125)
+    val_generator = FlexibleDataGenerator((data_train.X, data_train.y), (data_val.X, data_val.y), val_indices, batch_size=125)
+    
+    
+    inp_shape = Input(shape=data_train.X.shape[1:])
+    model = models.cnn2d(inp_shape, n_rgcs, **dict_params)  # Ensure dict_params is defined appropriately
+    
+    # Compile the model
+    model.compile(loss='poisson', optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001))
+    
+    # Train the model
+    model.fit(train_generator, validation_data=val_generator, epochs=100, verbose=1)
+    model_path = f'/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/model_fold_{fold+1}.h5'
+    model.save(model_path)
+    print(f'Model for fold {fold+1} saved to {model_path}')
+
+
+
+
+
+# Final Evaluation- Test dataset 
+test_loss, test_accuracy = model.evaluate(data_test.X, data_test.y)
+print(f"Test loss: {test_loss}, Test accuracy: {test_accuracy}")

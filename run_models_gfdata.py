@@ -11,7 +11,7 @@ idrees.sa@gmail.com
 # import needed modules
 import sys
 # update this 
-sys.path.append('/Users/niloughazavi/Documents/GitHub/BIOENGR_175_Final_Project')
+# sys.path.append('/Users/niloughazavi/Documents/GitHub/BIOENGR_175_Final_Project')
 
 import matplotlib.pyplot as plt
 
@@ -40,7 +40,7 @@ tf.compat.v1.disable_eager_execution()
 """
 
 # update this 
-fname_data_train_val_test_all = '/Users/niloughazavi/Desktop/Dataset_Saad/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
+fname_data_train_val_test_all = 'monkey_data/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
 
 
 idx_train_start = 0    # mins to chop off in the begining.
@@ -330,7 +330,7 @@ for fold, (train_indices, val_indices) in enumerate(kf.split(indices)):
     
     # Train the model
     model.fit(train_generator, validation_data=val_generator, epochs=100, verbose=1)
-    model_path = f'/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/model_fold_{fold+1}.h5'
+    model_path = f'model_fold_{fold+1}.h5'
     model.save(model_path)
     print(f'Model for fold {fold+1} saved to {model_path}')
 

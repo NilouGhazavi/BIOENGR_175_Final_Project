@@ -26,8 +26,6 @@ if gpus:
         # Visible devices must be set before GPUs have been initialized
         print(e)
 
-
-import tensorflow as tf
 tf.test.is_built_with_cuda()
 tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None)
 
@@ -49,7 +47,6 @@ from data_handler import prepare_data_cnn2d, load_h5Dataset, model_evaluate_new
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import load_model
 import gc
-import tensorflow as tf
 print(tf.__version__)
 tf.compat.v1.disable_eager_execution()
 
@@ -63,7 +60,7 @@ tf.compat.v1.disable_eager_execution()
 """
 
 
-fname_data_train_val_test_all = '/Dataset/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
+fname_data_train_val_test_all = 'monkey_data/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
 
 
 idx_train_start = 0    # mins to chop off in the begining.
@@ -73,8 +70,6 @@ testSamps_dur = 0.3 # minutes
 
 rgb = load_h5Dataset(fname_data_train_val_test_all,nsamps_val=validationSamps_dur,nsamps_train=trainingSamps_dur,nsamps_test=testSamps_dur,  # THIS NEEDS TO BE TIDIED UP
                      idx_train_start=idx_train_start)
-
-
 
 #START HERE 
 data_train=rgb[0]
@@ -381,8 +376,7 @@ for fold, (train_indices, test_indices) in enumerate(kf.split(data_X)):
     model_path = f'/model_fold_{fold+1}.h5'
     model.save(model_path)
     print(f'Model for fold {fold+1} saved to {model_path}')
-
-
+"""
 
 
 

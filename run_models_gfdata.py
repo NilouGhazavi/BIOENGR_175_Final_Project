@@ -63,7 +63,7 @@ tf.compat.v1.disable_eager_execution()
 """
 
 
-fname_data_train_val_test_all = '/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/Dataset/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
+fname_data_train_val_test_all = '/Dataset/monkey01_dataset_train_val_test_scot-30-Rstar.h5'
 
 
 idx_train_start = 0    # mins to chop off in the begining.
@@ -230,9 +230,9 @@ mdl.compile(loss='poisson', optimizer=tf.keras.optimizers.legacy.Adam(lr))
 mdl_history = mdl.fit(x=data_train.X, y=data_train.y, validation_data=(data_val.X,data_val.y), validation_freq=1, shuffle=True,batch_size=bz, epochs=nb_epochs)
 
                                                                                                                                                                                                                                                                                                             
-mdl.save('/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5')
+mdl.save('/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5')
 # Load the model 
-mdl=load_model(r"/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5")
+mdl=load_model(r"/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5")
 
 
 
@@ -323,46 +323,7 @@ plt.legend(['RGC actual response','RGC predicted response'])
 #END HERE 
 # trained model 
 
-#mdl.save('/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5')
-
-# %% Photoreceptor-CNN model
-
-"""
-
-pr_temporal_width = width_temporal
-temporal_width=width_temporal_final
-chan1_n=10
-filt1_size=15
-chan2_n=15
-filt2_size=11
-chan3_n=25
-filt3_size=11
-bz=125
-BatchNorm=1
-MaxPool=1
-
-pr_params = prfr_params.fr_rods_trainable()        # fr_rods_trainable, fr_rods_fixed, fr_cones_trainable, fr_cones_fixed
-
-dict_params = dict(chan1_n=chan1_n,filt1_size=filt1_size,
-                   chan2_n=chan2_n,filt2_size=filt2_size,
-                   chan3_n=chan3_n,filt3_size=filt3_size,
-                   filt_temporal_width=temporal_width,
-                   BatchNorm=BatchNorm,MaxPool=MaxPool,
-                   pr_params=pr_params,
-                   dtype='float32')
-
-
-inp_shape = Input(shape=X.shape[1:]) # keras input layer
-mdl = models.prfr_cnn2d(inp_shape,n_rgcs,**dict_params)
-mdl.summary()
-
-# % Train model
-lr = 0.0001
-nb_epochs=10
-
-mdl.compile(loss='poisson', optimizer=tf.keras.optimizers.Adam(lr))
-mdl_history = mdl.fit(x=X, y=y, batch_size=125, epochs=nb_epochs)
-
+#mdl.save('/Trained_Model_monkey01_dataset_scot-30-Rstar/trained_model_30.h5')
 
 
 
@@ -373,8 +334,6 @@ mdl_history = mdl.fit(x=X, y=y, batch_size=125, epochs=nb_epochs)
 # *****************  Modified for 175 final project 
 from tensorflow.keras.utils import Sequence 
 from sklearn.model_selection import KFold 
-
-
 
 
 ## Cross Validation with the training dataset 
@@ -419,7 +378,7 @@ for fold, (train_indices, test_indices) in enumerate(kf.split(data_X)):
     fold_results.append((evaluation))
     print(f"Fold {fold+1} -  loss: {evaluation}")
     # Save each model
-    model_path = f'/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/model_fold_{fold+1}.h5'
+    model_path = f'/model_fold_{fold+1}.h5'
     model.save(model_path)
     print(f'Model for fold {fold+1} saved to {model_path}')
 

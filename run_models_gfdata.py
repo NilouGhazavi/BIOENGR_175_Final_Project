@@ -30,14 +30,6 @@ tf.test.is_built_with_cuda()
 tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None)
 
 
-
-
-
-# import needed modules
-import sys
-# update the path 
-sys.path.append('/Users/Nilou Ghazavi/Desktop/Nilou/Light_Adaptation/code/')
-
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -96,8 +88,6 @@ idx_unitsToTake = np.arange(0,data_train.y.shape[-1])   # Take all the rgcs
 data_train = prepare_data_cnn2d(data_train,temporal_width,idx_unitsToTake)     # [samples,temporal_width,rows,columns]
 data_test = prepare_data_cnn2d(data_test,temporal_width,idx_unitsToTake)
 data_val = prepare_data_cnn2d(data_val,temporal_width,idx_unitsToTake)   
-
-
 
 
 
